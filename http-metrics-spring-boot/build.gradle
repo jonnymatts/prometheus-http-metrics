@@ -1,0 +1,88 @@
+dependencies {
+    compile project(":http-metrics-core")
+    compile group: 'org.springframework.boot', name: 'spring-boot', version: "${spring_boot_version}"
+}
+
+ext {
+    jarName = 'http-metrics-spring-boot'
+}
+
+jar {
+    baseName jarName
+    manifest {
+        attributes "application-version": version
+    }
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    baseName jarName
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    baseName jarName
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar, javadocJar, sourcesJar
+}
+
+// signing and maven plugin configuration. Run gradle with project property -Prelease to use these tasks
+// Ensure gradle.properties are set for signing key and sonatype credentials
+if (project.hasProperty("release")) {
+    signing {
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'Prometheus HTTP Metrics - Spring Boot'
+                    packaging 'jar'
+                    // optionally artifactId can be defined here
+                    artifactId jarName
+                    description 'Spring Boot integration for Prometheus HTTP metrics exporter'
+                    url 'jonnymatts.com'
+
+                    scm {
+                        connection 'scm:git:git://github.com/jonnymatts/prometheus-http-metrics.git'
+                        developerConnection 'scm:git:ssh://github.com:jonnymatts/prometheus-http-metrics.git'
+                        url 'http://github.com/jonnymatts/prometheus-http-metrics/tree/master'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT License'
+                            url 'http://www.opensource.org/licenses/mit-license.php'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name 'Jonathan Matts'
+                            email 'jonoamatts@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

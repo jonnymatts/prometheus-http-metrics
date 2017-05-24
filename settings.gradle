@@ -1,0 +1,5 @@
+rootProject.name = 'http-metrics'
+
+include 'http-metrics-core'
+include 'http-metrics-spring-boot'
+

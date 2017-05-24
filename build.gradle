@@ -1,0 +1,27 @@
+group 'com.jonnymatts.prometheus'
+version '0.1'
+
+allprojects {
+    ext {
+        group 'com.jonnymatts.prometheus'
+        version '0.1'
+        javax_version = '3.1.0'
+        prometheus_client_version = '0.0.22'
+        spring_boot_version = '1.5.3.RELEASE'
+    }
+}
+
+configure(subprojects) {
+
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'signing'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
