@@ -8,13 +8,16 @@ import java.io.IOException;
 public class HttpRequestMetricFilter implements Filter {
 
     private final HttpRequestMetricCounter counter;
+    private final HttpRequestDurationHistogram histogram;
 
-    public HttpRequestMetricFilter(HttpRequestMetricCounter counter) {
+    public HttpRequestMetricFilter(HttpRequestMetricCounter counter, HttpRequestDurationHistogram histogram) {
         this.counter = counter;
+        this.histogram = histogram;
     }
 
     public HttpRequestMetricFilter() {
         this.counter = new HttpRequestMetricCounter();
+        this.histogram = new HttpRequestDurationHistogram();
     }
 
     @Override
@@ -23,14 +26,23 @@ public class HttpRequestMetricFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(request, response);
-
         final HttpServletRequest requestFacade = (HttpServletRequest) request;
         final HttpServletResponse responseFacade = (HttpServletResponse) response;
+        final String path = requestFacade.getServletPath().substring(1);
+
+        histogram.labels(path)
+                .time(() -> {
+                            try {
+                                chain.doFilter(request, response);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                );
 
         counter.labels(
                 requestFacade.getMethod().toLowerCase(),
-                requestFacade.getServletPath().substring(1),
+                path,
                 String.valueOf(responseFacade.getStatus())
         ).inc();
     }
