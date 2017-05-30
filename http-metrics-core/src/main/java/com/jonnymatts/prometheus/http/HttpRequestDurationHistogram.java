@@ -10,8 +10,8 @@ class HttpRequestDurationHistogram {
 
     public HttpRequestDurationHistogram() {
         this.histogram = Histogram.build()
-                .name("http_request_duration_milliseconds")
-                .help("HTTP request durations in milliseconds")
+                .name("http_request_duration_seconds")
+                .help("HTTP request durations in seconds")
                 .labelNames("handler")
                 .create()
                 .register();
