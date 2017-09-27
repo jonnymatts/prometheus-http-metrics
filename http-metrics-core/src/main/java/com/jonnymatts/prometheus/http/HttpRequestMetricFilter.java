@@ -1,5 +1,7 @@
 package com.jonnymatts.prometheus.http;
 
+import com.jonnymatts.prometheus.configuration.HistogramConfiguration;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,11 @@ public class HttpRequestMetricFilter implements Filter {
     public HttpRequestMetricFilter(HttpRequestMetricCounter counter, HttpRequestDurationHistogram histogram) {
         this.counter = counter;
         this.histogram = histogram;
+    }
+
+    public HttpRequestMetricFilter(HistogramConfiguration histogramConfiguration) {
+        this.counter = new HttpRequestMetricCounter();
+        this.histogram = new HttpRequestDurationHistogram(histogramConfiguration);
     }
 
     public HttpRequestMetricFilter() {
