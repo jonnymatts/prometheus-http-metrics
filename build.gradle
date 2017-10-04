@@ -1,6 +1,3 @@
-group 'com.jonnymatts.prometheus'
-version '0.1'
-
 allprojects {
     ext {
         group 'com.jonnymatts.prometheus'

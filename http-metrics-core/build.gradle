@@ -1,5 +1,5 @@
 dependencies {
-    compile group: 'com.jonnymatts.prometheus', name: 'metrics-core', version: "0.1.0"
+    compile group: 'com.jonnymatts.prometheus', name: 'metrics-core', version: "0.2.0"
     compile group: 'io.prometheus', name: 'simpleclient', version: "${prometheus_client_version}"
     compile group: 'javax.servlet', name: 'javax.servlet-api', version: "${javax_version}"
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${jackson_version}"
