@@ -59,4 +59,12 @@ public class HttpRequestMetricFilterTest {
         verify(histogramChild).time(any(Runnable.class));
         verify(chain).doFilter(request, response);
     }
+
+    @Test
+    public void registerCallsRegisterOnCollectors() throws Exception {
+        filter.register();
+
+        verify(histogram).register();
+        verify(counter).register();
+    }
 }

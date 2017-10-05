@@ -58,4 +58,8 @@ public class HttpRequestMetricFilter implements Filter {
     public void destroy() {
     }
 
+    public void register() {
+        counter.register();
+        histogram.register();
+    }
 }

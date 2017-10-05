@@ -15,17 +15,7 @@ public class HttpRequestDurationHistogram extends PrometheusHistogram {
     }
 
     public HttpRequestDurationHistogram(HistogramConfiguration configuration) {
-        super(validate(configuration));
-    }
-
-    private static HistogramConfiguration validate(HistogramConfiguration configuration) {
-        if(configuration.getName() == null)
-            configuration.setName(DEFAULT_NAME);
-        if(configuration.getDescription() == null)
-            configuration.setDescription(DEFAULT_DESCRIPTION);
-        if(configuration.getLabels() == null)
-            configuration.setLabels(DEFAULT_LABELS);
-        return configuration;
+        super(configuration);
     }
 
     public HttpRequestDurationHistogram() {
