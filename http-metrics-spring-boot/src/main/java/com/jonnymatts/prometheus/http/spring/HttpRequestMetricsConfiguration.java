@@ -18,6 +18,9 @@ import java.io.FileInputStream;
 import static java.lang.String.format;
 import static java.nio.charset.Charset.defaultCharset;
 
+/***
+ * Requires a single {@code CollectorRegistry} bean to present.
+ * */
 @Configuration
 public class HttpRequestMetricsConfiguration {
 
