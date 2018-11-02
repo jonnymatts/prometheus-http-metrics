@@ -1,5 +1,6 @@
 package com.jonnymatts.prometheus.http;
 
+import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Counter;
 import io.prometheus.client.Histogram;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class HttpRequestMetricFilterTest {
     @Mock private HttpServletRequest request;
     @Mock private HttpServletResponse response;
     @Mock private FilterChain chain;
+    @Mock private CollectorRegistry registry;
 
     private HttpRequestMetricFilter filter;
 
@@ -64,7 +66,15 @@ public class HttpRequestMetricFilterTest {
     public void registerCallsRegisterOnCollectors() throws Exception {
         filter.register();
 
-        verify(histogram).register();
-        verify(counter).register();
+        verify(histogram).register(CollectorRegistry.defaultRegistry);
+        verify(counter).register(CollectorRegistry.defaultRegistry);
+    }
+
+    @Test
+    public void registerWithRegistryArgumentCallsRegisterOnCollectorsWithCorrectRegistry() throws Exception {
+        filter.register(registry);
+
+        verify(histogram).register(registry);
+        verify(counter).register(registry);
     }
 }

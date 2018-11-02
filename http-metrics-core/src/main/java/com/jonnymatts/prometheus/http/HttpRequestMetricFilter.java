@@ -1,6 +1,7 @@
 package com.jonnymatts.prometheus.http;
 
 import com.jonnymatts.prometheus.configuration.HistogramConfiguration;
+import io.prometheus.client.CollectorRegistry;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -59,7 +60,11 @@ public class HttpRequestMetricFilter implements Filter {
     }
 
     public void register() {
-        counter.register();
-        histogram.register();
+        register(CollectorRegistry.defaultRegistry);
+    }
+
+    public void register(CollectorRegistry registry) {
+        counter.register(registry);
+        histogram.register(registry);
     }
 }

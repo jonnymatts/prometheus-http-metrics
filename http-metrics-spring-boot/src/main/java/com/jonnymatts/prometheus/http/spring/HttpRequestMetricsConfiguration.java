@@ -3,6 +3,7 @@ package com.jonnymatts.prometheus.http.spring;
 import com.jonnymatts.prometheus.configuration.HistogramConfiguration;
 import com.jonnymatts.prometheus.http.HttpRequestMetricFilter;
 import com.jonnymatts.prometheus.http.configuration.HistogramConfigurationParser;
+import io.prometheus.client.CollectorRegistry;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -23,6 +24,7 @@ public class HttpRequestMetricsConfiguration {
     static final String DEFAULT_CONFIG_FILE_PATH = "/config/http-request-metric-config.yaml";
 
     private @Autowired HttpRequestMetricFilter httpRequestMetricFilter;
+    private @Autowired CollectorRegistry collectorRegistry;
 
     private Environment environment;
 
@@ -32,7 +34,7 @@ public class HttpRequestMetricsConfiguration {
 
     @PostConstruct
     public void postConstruct() {
-        httpRequestMetricFilter.register();
+        httpRequestMetricFilter.register(collectorRegistry);
     }
 
     @Bean
