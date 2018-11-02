@@ -1,7 +1,7 @@
 allprojects {
     ext {
         group 'com.jonnymatts.prometheus'
-        version '0.2.1'
+        version '0.3.0'
         javax_version = '3.1.0'
         prometheus_client_version = '0.5.0'
         spring_boot_version = '1.5.3.RELEASE'
